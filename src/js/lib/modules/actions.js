@@ -1,6 +1,6 @@
-import "../core";
 import $ from "../core";
 
+// помещяем контент на страницу. если аргумент пустой возвращает само содержимое елемента
 $.prototype.html = function (content) {
  for(let i = 0; i < this.length; i++) {
   if(content) {
@@ -12,9 +12,10 @@ $.prototype.html = function (content) {
  return this;
 };
 
+// получение елемента по номеру
 $.prototype.eq = function(i) {
   const swap = this[i];
-  const objLength = Object.keys(this).length;
+  const objLength = Object.keys(this).length; //возвращаем масив из перечисляемих свойств обьекта
 
   for(let i = 0; i < objLength; i++) {
     delete this[i];
@@ -25,7 +26,7 @@ $.prototype.eq = function(i) {
   return this;
 };
 
-
+// ищем елемент среди своих соседей которие имеют общего родителя
 $.prototype.index = function() {
   const parent = this[0].parentNode;
   const childs = [...parent.children];
@@ -36,34 +37,36 @@ $.prototype.index = function() {
   return childs.findIndex(findMyIndex);
 };
 
+//find elem by selector
 
 $.prototype.find = function(selector) {
-    let numberOfItems = 0;
-    let counter = 0;
-    const copyObj = Object.assign({}, this);
+  let numberOfItems = 0;
+  let counter = 0;
 
-    for(let i = 0; i < copyObj.length; i++) {
-        const arr = copyObj[i].querySelectorAll(selector);
-        if(arr.length == 0) {
+  const copyObj = Object.assign({}, this);
+
+  for (let i = 0; i < copyObj.length; i++) {
+      const arr = copyObj[i].querySelectorAll(selector);
+      if (arr.length == 0) {
           continue;
-        }
+      }
 
-        for (let j = 0; j < arr.length; i++) {
+      for (let j = 0; j < arr.length; j++) {
           this[counter] = arr[j];
           counter++;
-        }
+      }
 
-        numberOfItems += arr.lendth;
-    }
+      numberOfItems += arr.length;
+  }
 
-        this.length = numberOfItems;
+  this.length = numberOfItems;
 
-        const objLength = Object.keys(this).length;
-        for (; numberOfItems < objLength; numberOfItems++) {
-               delete this[numberOfItems];
-        }
+  const objLength = Object.keys(this).length;
+  for (; numberOfItems < objLength; numberOfItems++) {
+      delete this[numberOfItems];
+  }
 
-        return this;
+  return this;
 };
 
 // Find all neighbors except the object itself.
@@ -99,6 +102,7 @@ $.prototype.siblings = function() {
   return this;
 };
 
+// Сlosest parent
 
 $.prototype.closest = function(selector) {
   let counter = 0;

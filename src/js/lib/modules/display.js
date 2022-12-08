@@ -1,5 +1,6 @@
 import $ from '../core';
 
+// функция показивает елемент на странице
 $.prototype.show = function() {
  for(let i = 0; i < this.length; i++){
      if(!this[i].style) {
@@ -8,9 +9,10 @@ $.prototype.show = function() {
      this[i].style.display = '';
  }
 
- return this;
+ return this; // возвращаем this чтобы можна дальше с ним работать
 };
 
+//  скривает елементы
 $.prototype.hide = function() {
   for(let i = 0; i < this.length; i++){
       if(!this[i].style) {
@@ -22,6 +24,7 @@ $.prototype.hide = function() {
   return this;
  };
 
+ // елемент скрыт показиваем. показан скриваем. добавляем условие для проверки
  $.prototype.toggle = function() {
   for(let i = 0; i < this.length; i++){
       if(!this[i].style) {
@@ -33,6 +36,6 @@ $.prototype.hide = function() {
         this[i].style.display = 'none';  
       } 
   }
- 
+
   return this;
  };

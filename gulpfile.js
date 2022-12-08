@@ -11,12 +11,14 @@ const postcss = require("gulp-postcss");
 // const dist = "/Applications/MAMP/htdocs/test"; // Ссылка на вашу папку на локальном сервере
 const dist = "./dist";
 
+// Копирует HTML файл и кладет в dist чтоби обрабативать при помощи сервера
 gulp.task("copy-html", () => {
     return gulp.src("./src/index.html")
                 .pipe(gulp.dest(dist))
                 .pipe(browsersync.stream());
 });
 
+//Коомпилирует все стили написаные с помощю SCSS
 gulp.task("build-sass", () => {
     return gulp.src("./src/sass/style.scss")
                 .pipe(sass().on('error', sass.logError))
@@ -56,6 +58,7 @@ gulp.task("build-js", () => {
                 .on("end", browsersync.reload);
 });
 
+// запускает локал сервер 4000 порту из папки dist
 gulp.task("watch", () => {
     browsersync.init({
 		server: "./dist/",
@@ -63,20 +66,23 @@ gulp.task("watch", () => {
 		notify: true
     });
     
+    // 3 задачи позволяющие слидить за html, **/* за любыми изминениями в js, scss
     gulp.watch("./src/index.html", gulp.parallel("copy-html"));
     gulp.watch("./src/js/**/*.js", gulp.parallel("build-js"));
     gulp.watch("./src/sass/**/*.scss", gulp.parallel("build-sass"));
 });
-
+   // запускает все 3 више задачи паралельно
 gulp.task("build", gulp.parallel("copy-html", "build-js", "build-sass"));
 
+// ета часть кода обрабативает scss файлы 
 gulp.task("prod", () => {
     gulp.src("./src/sass/style.scss")
         .pipe(sass().on('error', sass.logError))
-        .pipe(postcss([autoprefixer()]))
-        .pipe(cleanCSS())
-        .pipe(gulp.dest(dist));
+        .pipe(postcss([autoprefixer()])) // ставит афвтопрефиксы
+        .pipe(cleanCSS()) // очищает css файл минифицирует 
+        .pipe(gulp.dest(dist)); // и складует в папку dist
 
+//тоже происходит с js файлом она полностю собирется минифицируєтся и будет готов к работе
     return gulp.src("./src/js/main.js")
                 .pipe(webpack({
                     mode: 'production',
@@ -103,5 +109,5 @@ gulp.task("prod", () => {
                 }))
                 .pipe(gulp.dest(dist));
 });
-
+// запускает паралельно watch and build
 gulp.task("default", gulp.parallel("watch", "build"));
